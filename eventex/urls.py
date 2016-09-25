@@ -16,10 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from eventex.core.views import home
-from eventex.subscriptions.views import subscribe
+from eventex.subscriptions.views import subscribe, detail
 
 urlpatterns = [
     url(r'^$', home),
     url(r'^inscricao/$', subscribe),
+    url(r'^inscricao/(\d+)/$', detail), # (\d+) Significa um ou mais dígitos que esse cara seja capturado. Vai ser passado como argumento para a view detail.
     url(r'^admin/', admin.site.urls),
 ]
