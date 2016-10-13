@@ -32,7 +32,8 @@ def create(request):
                'subscriptions/subscription_email.txt',
                {'subscription': subscription})
 
-    masked_id = int(subscription.pk) ^ 0xABCDEFAB
+    #masked_id = int(subscription.pk) ^ 0xABCDEFAB
+    masked_id = int(subscription.pk) # Desabilitar a ofuscagem de ID. Está me atrapalhando seguir o curso.
 
     return HttpResponseRedirect('/inscricao/{}/'.format(masked_id))
 
@@ -43,6 +44,7 @@ def new(request):
 
 def detail(request, pk):
     unmasked_id = int(pk) ^ 0xABCDEFAB
+    unmasked_id = int(pk) # Desabilitar a afosucagem de ID. Está me atrapalhando seguir o curso.
 
     try:
         subscription = Subscription.objects.get(pk=unmasked_id)
