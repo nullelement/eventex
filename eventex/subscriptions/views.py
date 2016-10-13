@@ -3,19 +3,23 @@ from django.contrib import messages
 from django.core import mail
 from django.http import Http404
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, resolve_url as r
 from django.template.loader import render_to_string
 
 from eventex.subscriptions.forms import SubscriptionForm
 from eventex.subscriptions.models import Subscription
 
 
-def subscribe(request):
+def new(request):
     if request.method == 'POST':
         return create(request)
-    else:
-        return new(request)
 
+    return empty_form(request)
+
+
+def empty_form(request):
+    return render(request, 'subscriptions/subscription_form.html',
+                  {'form': SubscriptionForm()})
 
 def create(request):
     form = SubscriptionForm(request.POST)
@@ -35,12 +39,8 @@ def create(request):
     #masked_id = int(subscription.pk) ^ 0xABCDEFAB
     masked_id = int(subscription.pk) # Desabilitar a ofuscagem de ID. Está me atrapalhando seguir o curso.
 
-    return HttpResponseRedirect('/inscricao/{}/'.format(masked_id))
+    return HttpResponseRedirect(r('subscriptions:detail', subscription.pk))
 
-
-def new(request):
-    return render(request, 'subscriptions/subscription_form.html',
-                  {'form': SubscriptionForm()})
 
 def detail(request, pk):
     unmasked_id = int(pk) ^ 0xABCDEFAB
